@@ -58,6 +58,9 @@
                 <div class="collapse" id="forpolio">
                     <ul class="side-nav-second-level">
                         <li>
+                            <a href="<?= base_url() ?>administrasi/cv/">Cv Projek</a>
+                        </li>
+                        <li>
                             <a href="apps-email-inbox.html">Inbox</a>
                         </li>
                         <li>
