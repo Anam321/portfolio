@@ -96,6 +96,7 @@ class Cv_m extends CI_Model
         $q = $this->db->query("select foto from projek where projek_id = '$id'")->row();
         $foto = $q->foto;
 
+
         // var_dump($foto);
 
         $path = './assets/upload/gallery/';
@@ -107,6 +108,36 @@ class Cv_m extends CI_Model
 
         $this->db->where('projek_id', $id);
         $r = $this->db->delete('projek');
+
+        if ($r) {
+            $res['status'] = '00';
+            $res['type'] = 'success';
+            $res['mess'] = 'Berhasil Hapus Data';
+        } else {
+            $res['status'] = '01';
+            $res['type'] = 'warning';
+            $res['mess'] = 'Gagal Hapus Data';
+        }
+        return json_encode($res);
+    }
+
+    public function remove($id)
+    {
+
+        $q = $this->db->query("select foto from gallery where gallery_id = '$id'")->row();
+        $foto = $q->foto;
+
+        // var_dump($foto);
+
+        $path = './assets/upload/gallery/';
+        // hapus file
+        if (file_exists($path . $foto)) {
+            unlink($path . $foto);
+        }
+
+
+        $this->db->where('gallery_id', $id);
+        $r = $this->db->delete('gallery');
 
         if ($r) {
             $res['status'] = '00';

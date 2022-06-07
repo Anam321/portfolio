@@ -8,7 +8,7 @@ class Cv extends CI_Controller
     {
         parent::__construct();
         $this->load->model('admin/Cv_m', 'cv');
-        // $this->load->model('admin/Profil_m', 'profil');
+        $this->load->model('admin/Profil_m', 'profil');
         is_logged_in();
 
         $this->load->library('session');
@@ -18,7 +18,9 @@ class Cv extends CI_Controller
     {
         $data = [
 
-            'judul' => 'Cv | ',
+            'judul' => 'Cv | ' . $this->profil->get_profile('nama'),
+            'logo' =>  $this->profil->get_profile('logo'),
+            'nama' =>  $this->profil->get_profile('nama'),
             'user' => $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array(),
 
         ];
@@ -80,6 +82,9 @@ class Cv extends CI_Controller
                 $data[] = '<div class="col-md-4">
                         <img src="' . base_url() . 'assets/upload/gallery/' . $dat['foto'] . '" alt="image" class="img-fluid img-thumbnail"
                             width="200" />
+                             <button onclick="remove(' . $dat['gallery_id'] . ')" type="button" class="btn btn-info btn-sm">
+                <span>Remove</span>
+            </button>
                     </div>';
             }
 
@@ -113,6 +118,11 @@ class Cv extends CI_Controller
                         'link' => $this->input->post('link'),
                         'date_post' => date("Y-m-d H:i:s"),
                         'foto' => $image_data['file_name'],
+
+                        'client' => $this->input->post('client'),
+                        'deskripsi' => $this->input->post('deskripsi'),
+
+                        'kategori' => $this->input->post('kategori'),
                     );
 
                     $input = $this->cv->input($data);
@@ -154,8 +164,11 @@ class Cv extends CI_Controller
                     //direktori file
                     $data = array(
                         'projek_id' => $this->input->post('projek_id'),
+                        'token' => 2,
                         'date_post' => date("Y-m-d H:i:s"),
                         'foto' => $image_data['file_name'],
+
+
                     );
 
                     $input = $this->cv->upload($data);
@@ -198,6 +211,11 @@ class Cv extends CI_Controller
                         'nama' => $this->input->post('nama'),
                         'link' => $this->input->post('keterangan'),
                         'foto' => $image_data['file_name'],
+
+                        'client' => $this->input->post('client'),
+                        'deskripsi' => $this->input->post('deskripsi'),
+
+                        'kategori' => $this->input->post('kategori'),
                     );
                 }
                 $update =  $this->cv->update(array('projek_id' => $this->input->post('projek_id')), $data);
@@ -206,6 +224,11 @@ class Cv extends CI_Controller
                 $data = array(
                     'nama' => $this->input->post('nama'),
                     'link' => $this->input->post('link'),
+
+                    'client' => $this->input->post('client'),
+                    'deskripsi' => $this->input->post('deskripsi'),
+
+                    'kategori' => $this->input->post('kategori'),
                 );
                 $update =  $this->cv->update(array('projek_id' => $this->input->post('projek_id')), $data);
                 echo json_encode($update);
@@ -217,6 +240,12 @@ class Cv extends CI_Controller
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo $this->cv->delete_dataByid($id);
+        }
+    }
+    public function remove($id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            echo $this->cv->remove($id);
         }
     }
 }

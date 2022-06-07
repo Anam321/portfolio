@@ -17,8 +17,7 @@
 
     <div class="card">
         <div class="card-header">
-            <button onclick="add()" type="button" class="btn btn-info btn-sm"><i
-                    class="mdi mdi-message-plus-outline me-1"></i>
+            <button onclick="add()" type="button" class="btn btn-info btn-sm"><i class="mdi mdi-message-plus-outline me-1"></i>
                 <span>Tambah Cv</span>
             </button>
         </div>
@@ -42,8 +41,7 @@
 
 </div>
 
-<div id="modalcv" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="info-header-modalLabel"
-    aria-hidden="true">
+<div id="modalcv" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="info-header-modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header modal-colored-header bg-info">
@@ -56,21 +54,38 @@
                     <div class="row mb-3">
                         <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Nama</label>
                         <div class="col-9">
-                            <input type="text" name="nama" class="form-control form-control-sm" id="inputEmail3">
+                            <input type="text" name="nama" class="form-control form-control-sm">
                         </div>
                     </div>
                     <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Client</label>
+                        <div class="col-9">
+                            <input type="text" name="client" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label col-form-label-sm">Kategori</label>
+                        <div class="col-9">
+                            <input type="text" name="kategori" class="form-control form-control-sm">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
                         <label for="inputPassword3" class="col-sm-2 col-form-label col-form-label-sm">Link</label>
                         <div class="col-9">
-                            <input type="text" name="link" class="form-control form-control-sm" data-provide="typeahead"
-                                id="the-basics" placeholder="Basic Example">
+                            <input type="text" name="link" class="form-control form-control-sm" data-provide="typeahead" id="the-basics" placeholder="Basic Example">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label col-form-label-sm">Deskripsi</label>
+                        <div class="col-9">
+                            <textarea name="deskripsi" class="form-control form-control-sm" cols="30" rows="10" style="height:200px ;"></textarea>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="inputPassword3" class="col-sm-2 col-form-label col-form-label-sm">Foto</label>
                         <div class="col-9">
-                            <input type="file" name="foto" class="form-control form-control-sm" data-provide="typeahead"
-                                id="the-basics" placeholder="Basic Example">
+                            <input type="file" name="foto" class="form-control form-control-sm" data-provide="typeahead" id="the-basics" placeholder="Basic Example">
                         </div>
                     </div>
 

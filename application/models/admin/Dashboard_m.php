@@ -4,6 +4,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Dashboard_m extends CI_Model
 {
 
+    public function get_pengunjung()
+    {
+        $this->db->select('*');
+        $this->db->from('visitor');
+        $query = $this->db->get();
+        return $query;
+    }
+
+
 
     function getJlhdata($table)
     {
@@ -28,6 +37,14 @@ class Dashboard_m extends CI_Model
             $data = $query;
         }
         return $data;
+    }
+
+    public function get_panggilan()
+    {
+        $this->db->select('*');
+        $this->db->from('whatsapptracking');
+        $query = $this->db->get();
+        return $query;
     }
 
     public function get_data()
@@ -68,21 +85,5 @@ class Dashboard_m extends CI_Model
         // $this->db->where('produk_id', $id);
         // $query = $this->db->get();
         // return $query->result();
-    }
-
-
-    public function get_pengunjung()
-    {
-        $this->db->select('*');
-        $this->db->from('visitor');
-        $query = $this->db->get();
-        return $query;
-    }
-    public function get_panggilan()
-    {
-        $this->db->select('*');
-        $this->db->from('klikwa');
-        $query = $this->db->get();
-        return $query;
     }
 }

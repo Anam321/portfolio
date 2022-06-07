@@ -1,338 +1,249 @@
 <script type="text/javascript">
-var table; // for table
-var foor; // for table
-var save_method; // untuk metode save data varible global
+    var table; // for table
+    var foor; // for table
+    var save_method; // untuk metode save data varible global
 
-// itu yang buat add udah jalan ga bakalan bener soalna harus satu file lamun banyak pati menumpuk di file footer.php
-function reload_data() {
-    foor.ajax.reload(null, false); //reload datatable ajax
-}
+    // itu yang buat add udah jalan ga bakalan bener soalna harus satu file lamun banyak pati menumpuk di file footer.php
+    function reload_data() {
+        foor.ajax.reload(null, false); //reload datatable ajax
+    }
 
-function reload_table() {
-    table.ajax.reload(null, false); //reload datatable ajax
-}
+    function reload_table() {
+        table.ajax.reload(null, false); //reload datatable ajax
+    }
 
-function showAlert(type, msg) {
+    function showAlert(type, msg) {
 
-    toastr.options.closeButton = true;
-    toastr.options.progressBar = true;
-    toastr.options.extendedTimeOut = 1000; //1000
+        toastr.options.closeButton = true;
+        toastr.options.progressBar = true;
+        toastr.options.extendedTimeOut = 1000; //1000
 
-    toastr.options.timeOut = 3000;
-    toastr.options.fadeOut = 250;
-    toastr.options.fadeIn = 250;
+        toastr.options.timeOut = 3000;
+        toastr.options.fadeOut = 250;
+        toastr.options.fadeIn = 250;
 
-    toastr.options.positionClass = 'toast-top-center';
-    toastr[type](msg);
-}
+        toastr.options.positionClass = 'toast-top-center';
+        toastr[type](msg);
+    }
 
-$(document).ready(function() {
-    $('.summernote').summernote();
-});
 
-function fileValidation() {
-    var fileInput = document.getElementById('file');
-    var filePath = fileInput.value;
-    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
-    if (!allowedExtensions.exec(filePath)) {
-        alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
-        fileInput.value = '';
-        return false;
-    } else {
-        //Image preview
-        if (fileInput.files && fileInput.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('imagePreview').innerHTML = '<img style="max-width:350px;" src="' + e.target
-                    .result + '"/>';
-            };
-            reader.readAsDataURL(fileInput.files[0]);
+    function fileValidation() {
+        var fileInput = document.getElementById('file');
+        var filePath = fileInput.value;
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+            fileInput.value = '';
+            return false;
+        } else {
+            //Image preview
+            if (fileInput.files && fileInput.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').innerHTML = '<img style="max-width:350px;" src="' + e.target
+                        .result + '"/>';
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            }
         }
     }
-}
 
-function artikel_table() {
+    function listArtikel() {
 
-    table = $('#artikeltable').DataTable({
-
-        "processing": true,
-        'paging': true,
-        'lengthChange': true,
-        'info': true,
-        'autoWidth': false,
-        "ajax": "<?= base_url("administrasi/artikel/listartikel") ?>",
-        stateSave: true,
-        "order": []
-
-
-    });
-}
-artikel_table();
-
-function tambah() {
-    save_method = 'add';
-    $('#forms')[0].reset(); // reset form on modal
-    $('#slidmodal').modal('show'); // show bootstrap modal
-    $('.modal-title').text('Tambah Artikel');
-}
-
-
-function detail(id) {
-    $('#detailmodal').modal('show');
-    $('#detaillist').empty();
-    $.ajax({
-        url: "<?php echo site_url('administrasi/artikel/detail/') ?>" + id,
-        type: "POST",
-        dataType: "JSON",
-        success: function(data) {
-            $('#detaillist').html(data);
-
-
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert('Error get data from ajax');
-        }
-    });
-}
-
-function delete_data(id) {
-    if (confirm('Apakah Anda yakin menghapus data ini ?')) {
-        // ajax delete data to database
+        $('#dataArtikel').empty();
         $.ajax({
-            url: "<?php echo site_url('administrasi/artikel/delete_data/') ?>" + id,
+            url: "<?php echo site_url('administrasi/artikel/list_artikel/') ?>",
             type: "POST",
             dataType: "JSON",
             success: function(data) {
-                if (data.status == '00') {
-                    // reload_list_produk();
+                $('#dataArtikel').html(data);
 
-                    showAlert(data.type, data.mess);
-                    reload_table();
-                } else {
 
-                    showAlert(data.type, data.mess);
-                    reload_table();
-                }
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error deleting data');
+                alert('Error get data from ajax');
             }
         });
     }
-}
+    listArtikel();
 
-function on(id) {
-    // alert('you can edit here !');
+    function kembali() {
 
-    $('#formon')[0].reset();
-    $('#modalon').modal('show'); //show modal bootstrap
-
-
-    $.ajax({
-        url: "<?php echo site_url('administrasi/artikel/ajax_edit/') ?>" + id,
-        type: "POST",
-        dataType: "JSON",
-
-        success: function(data) {
-
-            $('[name="artikel_id"]').val(data.artikel_id);
-
-
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert('Error get data from ajax');
-        }
-    });
-
-}
-
-function of (id) {
-    // alert('you can edit here !');
-
-    $('#formof')[0].reset();
-    $('#modalof').modal('show'); //show modal bootstrap
-
-
-    $.ajax({
-        url: "<?php echo site_url('administrasi/artikel/ajax_edit/') ?>" + id,
-        type: "POST",
-        dataType: "JSON",
-
-        success: function(data) {
-
-            $('[name="artikel_id"]').val(data.artikel_id);
-
-
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert('Error get data from ajax');
-        }
-    });
-
-}
-
-$('#forms').submit(function(e) {
-    // alert("Form submitted!");
-    e.preventDefault();
-    // Get form
-    var form = $('#forms')[0];
-
-    // Create an FormData object
-    //var data = new FormData(form);
-    var data = new FormData(form);
-    //var data = $(this).serialize();
-
-
-    $('#btnSave').text('Sedang Proses, Mohon tunggu...'); //change button text
-    $('#btnSave').attr('disabled', true); //set button disable
-
-    // ajax adding data to database
-    // console.log($('#forms').serialize());
-    var url;
-
-    if (save_method == 'add') {
-        url = "<?php echo site_url('administrasi/artikel/input_artikel') ?>";
-    } else {
-        url = "<?php echo site_url('administrasi/artikel/update_artikel') ?>";
+        window.location.href = "<?php echo site_url('administrasi/artikel/') ?>";
     }
 
-    $.ajax({
-        url: url,
-        type: "POST",
-        //contentType: 'multipart/form-data',
-        cache: false,
-        contentType: false,
-        processData: false,
-        method: 'POST',
-        data: data,
-        dataType: "JSON",
 
-        success: function(data) {
-            if (data.status == '00') //if success close modal and reload ajax table
-            {
-                // get_list_produk();
-                showAlert(data.type, data.mess);
-                $('#slidmodal').modal('hide');
-                $('#forms')[0].reset();
-                reload_table();
-            } else {
-
-                showAlert(data.type, data.mess);
+    function addartikel() {
+        save_method = 'add';
+        $('#form')[0].reset();
+        $('#imagePreview').html('');
+        $('#summernote').summernote('code', '');
+        $('#modalartikel').modal('show');
+        $('.modal-title').text('Tambah Artikel');
+    }
 
 
+    $('#form').submit(function(e) {
+        e.preventDefault();
+        var form = $('#form')[0];
+        var data = new FormData(form);
+        if (save_method == 'add') {
+            if ($('[name="foto"]').val() == '') {
+                alert('Pilih Foto Produk Yang Akan di Upload !');
+                return false;
             }
-
-            $('#btnSave').text('Simpan'); //change button text
-            $('#btnSave').attr('disabled', false); //set button enable
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            type = 'error';
-            msg = 'Error adding / update data';
-            showAlert(type, msg); //utk show alert
-            $('#btnSave').text('Simpan'); //change button text
-            $('#btnSave').attr('disabled', false); //set button enable
+        } else {
+            ''
         }
+        $('#btnSave').text('Sedang Proses, Mohon tunggu...'); //change button text
+        $('#btnSave').attr('disabled', true); //set button disable
+        var url;
+
+        if (save_method == 'add') {
+            url = "<?php echo site_url('administrasi/artikel/input_artikel') ?>";
+        } else {
+            url = "<?php echo site_url('administrasi/artikel/update_artikel') ?>";
+        }
+        $.ajax({
+            url: url,
+            type: "POST",
+            //contentType: 'multipart/form-data',
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            data: data,
+            dataType: "JSON",
+
+            success: function(data) {
+                if (data.status == '00') {
+                    showAlert(data.type, data.mess);
+                    $('#modalartikel').modal('hide');
+                    $('#form')[0].reset();
+                    listArtikel();
+                } else {
+
+                    showAlert(data.type, data.mess);
+                }
+                $('#btnSave').text('Simpan'); //change button text
+                $('#btnSave').attr('disabled', false); //set button enable
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                type = 'error';
+                msg = 'Error adding / update data';
+                showAlert(type, msg); //utk show alert
+                $('#btnSave').text('Simpan'); //change button text
+                $('#btnSave').attr('disabled', false); //set button enable
+            }
+        });
+
     });
 
-});
 
+    function edit(id) {
+        save_method = 'update';
+        $('#form')[0].reset();
+        $('#imagePreview').html('');
+        $('#modalartikel').modal('show');
+        $('.modal-title').text('Edit Artikel');
+        $('#summernote').summernote('code', '');
 
-$('#formon').submit(function(e) {
+        $.ajax({
+            url: "<?php echo site_url('administrasi/artikel/edit_data/') ?>" + id,
+            type: "POST",
+            dataType: "JSON",
 
-    // alert("Form submitted!");
-    e.preventDefault();
-    var form = $('#formon')[0];
-    var data = new FormData(form);
+            success: function(data) {
+                $('[name="artikel_id"]').val(data.artikel_id);
+                $('[name="judul_artikel"]').val(data.judul_artikel);
+                $('[name="penerbit"]').val(data.penerbit);
+                $('[name="link"]').val(data.link);
 
-    $('#on').text('Mohon tunggu..'); //change button text
-    $('#on').attr('disabled', true); //set button disable
+                $('#summernote').summernote('code', data.konten);
+                $('[name="old_foto"]').val(data.foto);
 
-
-    $.ajax({
-        url: "<?php echo site_url('administrasi/artikel/on') ?> ",
-        type: "POST",
-        //contentType: 'multipart/form-data',
-        cache: false,
-        contentType: false,
-        processData: false,
-        method: 'POST',
-        data: data,
-        dataType: "JSON",
-
-        success: function(data) {
-            if (data.status == '00') //if success close modal and reload ajax table
-            {
-                // get_list_produk();
-                showAlert(data.type, data.mess);
-                $('#modalon').modal('hide');
-                $('#formon')[0].reset();
-                reload_table();
-            } else {
-
-                showAlert(data.type, data.mess);
-
-
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
             }
+        });
+    }
 
-            $('#on').text('on'); //change button text
-            $('#on').attr('disabled', false); //set button enable
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            type = 'error';
-            msg = 'Error adding / update data';
-            showAlert(type, msg); //utk show alert
-            $('#on').text('on'); //change button text
-            $('#on').attr('disabled', false); //set button enable
+    function hapus(id) {
+        if (confirm('Apakah Anda yakin menghapus data ini ?')) {
+            // ajax delete data to database
+            $.ajax({
+                url: "<?php echo site_url('administrasi/artikel/delete_data/') ?>" + id,
+                type: "POST",
+                dataType: "JSON",
+                success: function(data) {
+                    if (data.status == '00') {
+                        // reload_list_produk();
+
+                        showAlert(data.type, data.mess);
+                        listArtikel();
+                    } else {
+
+                        showAlert(data.type, data.mess);
+                        listArtikel();
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error deleting data');
+                }
+            });
         }
-    });
+    }
 
-});
+    function mute(id) {
+        if (confirm('Apakah Anda yakin menyembunykan data ini ?')) {
+            // ajax delete data to database
+            $.ajax({
+                url: "<?php echo site_url('administrasi/artikel/mute/') ?>" + id,
+                type: "POST",
+                dataType: "JSON",
+                success: function(data) {
+                    if (data.status == '00') {
+                        // reload_list_produk();
 
-$('#formof').submit(function(e) {
+                        showAlert(data.type, data.mess);
+                        listArtikel();
+                    } else {
 
-    // alert("Form submitted!");
-    e.preventDefault();
-
-    var form = $('#formof')[0];
-    var data = new FormData(form);
-    $('#of').text('Mohon tunggu..'); //change button text
-    $('#of').attr('disabled', true); //set button disable
-
-    $.ajax({
-        url: "<?php echo site_url('administrasi/artikel/of') ?>",
-        type: "POST",
-        //contentType: 'multipart/form-data',
-        cache: false,
-        contentType: false,
-        processData: false,
-        method: 'POST',
-        data: data,
-        dataType: "JSON",
-
-        success: function(data) {
-            if (data.status == '00') //if success close modal and reload ajax table
-            {
-                // get_list_produk();
-                showAlert(data.type, data.mess);
-                $('#modalof').modal('hide');
-                $('#formof')[0].reset();
-                reload_table();
-            } else {
-
-                showAlert(data.type, data.mess);
-            }
-
-            $('#of').text('on'); //change button text
-            $('#of').attr('disabled', false); //set button enable
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            type = 'error';
-            msg = 'Error adding / update data';
-            showAlert(type, msg); //utk show alert
-            $('#of').text('on'); //change button text
-            $('#of').attr('disabled', false); //set button enable
+                        showAlert(data.type, data.mess);
+                        listArtikel();
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error deleting data');
+                }
+            });
         }
-    });
+    }
 
-});
+    function tampil(id) {
+        if (confirm('Apakah Anda yakin menampilkan data ini ?')) {
+            // ajax delete data to database
+            $.ajax({
+                url: "<?php echo site_url('administrasi/artikel/tampil/') ?>" + id,
+                type: "POST",
+                dataType: "JSON",
+                success: function(data) {
+                    if (data.status == '00') {
+                        // reload_list_produk();
+
+                        showAlert(data.type, data.mess);
+                        listArtikel();
+                    } else {
+
+                        showAlert(data.type, data.mess);
+                        listArtikel();
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error deleting data');
+                }
+            });
+        }
+    }
 </script>

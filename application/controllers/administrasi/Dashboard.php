@@ -8,7 +8,7 @@ class Dashboard extends CI_Controller
     {
         parent::__construct();
         $this->load->model('admin/Dashboard_m', 'dashboard');
-        // $this->load->model('admin/Profil_m', 'profil');
+        $this->load->model('admin/Profil_m', 'profil');
         is_logged_in();
 
         $this->load->library('session');
@@ -18,8 +18,17 @@ class Dashboard extends CI_Controller
     {
         $data = [
 
-            'judul' => 'Dashboard | ',
+            'judul' => 'Dashboard | ' . $this->profil->get_profile('nama'),
+            'logo' =>  $this->profil->get_profile('logo'),
+            'nama' => $this->profil->get_profile('nama'),
             'user' => $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array(),
+            'pengunjung' => $this->dashboard->get_pengunjung()->result(),
+            'allpengunjung' => $this->dashboard->getJlhdata('visitor'),
+            // 'jmlproduk' => $this->dashboard->getJlhdata('ref_produk'),
+            // 'jmlprojek' => $this->dashboard->getJlhdatames('tender', 'status', 1),
+            // 'projekselesai' => $this->dashboard->getJlhdatames('tender', 'is_time', 1),
+            // 'panggilan' => $this->dashboard->get_panggilan()->result(),
+            // 'totalmenghubungi' => $this->dashboard->getJlhdata('whatsapptracking'),
 
         ];
         $this->load->view('themplates/header.php', $data);
@@ -29,6 +38,7 @@ class Dashboard extends CI_Controller
 
         $this->load->view('admin/dashboard_v', $data);
         $this->load->view('js/dashboard_js');
+
         $this->load->view('themplates/footer.php');
     }
 }

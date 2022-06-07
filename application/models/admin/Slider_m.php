@@ -7,11 +7,11 @@ class Slider_m extends CI_Model
 
 
 
-    public function get_slider()
+    public function get_dataslide()
     {
         $this->db->select('*');
-        $this->db->from('set_slider');
-        $this->db->order_by('slid_id', 'DESC');
+        $this->db->from('set_hero');
+        $this->db->order_by('hero_id', 'DESC');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -20,8 +20,8 @@ class Slider_m extends CI_Model
     {
 
         $this->db->select('*');
-        $this->db->from('set_slider');
-        $this->db->where('slid_id', $id);
+        $this->db->from('set_hero');
+        $this->db->where('hero_id', $id);
         // $query = $this->db->get();
         // return $query->result_array();
 
@@ -30,19 +30,29 @@ class Slider_m extends CI_Model
             return $query->row();
         }
     }
-    public function get_slidid($id)
-    {
 
-        $this->db->select('*');
-        $this->db->from('set_slider');
-        $this->db->where('slid_id', $id);
-        $query = $this->db->get();
-        return $query->result_array();
+
+    public function switch($id, $data)
+    {
+        $this->db->where('hero_id', $id);
+        $r = $this->db->update('set_hero', $data);
+        if ($r) {
+            $res['status'] = '00';
+            $res['type'] = 'success';
+            $res['mess'] = 'Data Berhasil Update';
+        } else {
+            $res['status'] = '01';
+            $res['type'] = 'warning';
+            $res['mess'] = 'Gagal Update Data';
+        }
+        return $res;
     }
 
-    public function input_slider($data)
+
+
+    public function input_slide($data)
     {
-        $r = $this->db->insert('set_slider', $data);
+        $r = $this->db->insert('set_hero', $data);
 
         if ($r) {
             $res['status'] = '00';
@@ -56,48 +66,11 @@ class Slider_m extends CI_Model
         return $res;
     }
 
-    public function ajax_updateslid($where, $data)
-    {
-        $r = $this->db->update('set_slider', $data, $where);
-        if ($r) {
-            $res['status'] = '00';
-            $res['type'] = 'success';
-            $res['mess'] = 'Data Berhasil Update';
-        } else {
-            $res['status'] = '01';
-            $res['type'] = 'warning';
-            $res['mess'] = 'Gagal Update Data';
-        }
-        return $res;
-    }
-
-    // public function update_foto($where, $data)
-    // {
-
-    //     // $r = $this->db->insert('foto', $data);
-
-    //     // if ($data) {
-    //     // $this->db->insert('foto', $data);
-    //     // $inpudat = $data;
-    //     // } else {
-    //     $r = $this->db->update('set_profil', $data, $where);
-    //     if ($r) {
-    //         $res['status'] = '00';
-    //         $res['type'] = 'success';
-    //         $res['mess'] = 'Berhasil Upload';
-    //     } else {
-    //         $res['status'] = '01';
-    //         $res['type'] = 'warning';
-    //         $res['mess'] = 'Gagal upload Data';
-    //     }
-    //     return $res;
-    //     // }
-    // }
     public function update($where, $data)
     {
 
 
-        $r = $this->db->update('set_slider', $data, $where);
+        $r = $this->db->update('set_hero', $data, $where);
         if ($r) {
             $res['status'] = '00';
             $res['type'] = 'success';
@@ -110,23 +83,23 @@ class Slider_m extends CI_Model
         return $res;
         // }
     }
-    public function delete_slidByid($id)
+    public function delete_by_id($id)
     {
 
-        $q = $this->db->query("select gambar from set_slider where slid_id = '$id'")->row();
-        $foto = $q->gambar;
+        $q = $this->db->query("select foto from set_hero where hero_id = '$id'")->row();
+        $foto = $q->foto;
 
         // var_dump($foto);
 
-        $path = './assets/upload/hero/';
+        $path = './assets/upload/gallery/';
         // hapus file
         if (file_exists($path . $foto)) {
             unlink($path . $foto);
         }
 
 
-        $this->db->where('slid_id', $id);
-        $r = $this->db->delete('set_slider');
+        $this->db->where('hero_id', $id);
+        $r = $this->db->delete('set_hero');
 
         if ($r) {
             $res['status'] = '00';

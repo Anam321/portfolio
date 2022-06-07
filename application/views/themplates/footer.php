@@ -6,8 +6,8 @@
          <div class="row">
              <div class="col-md-6">
                  <script>
-                 document.write(new Date().getFullYear())
-                 </script> © anbomekerDev - Talagamurni
+                     document.write(new Date().getFullYear())
+                 </script> © anbomekerDev - <?= $nama ?>
              </div>
              <div class="col-md-6">
                  <div class="text-md-end footer-links d-none d-md-block">
@@ -54,14 +54,12 @@
              <hr class="mt-1">
 
              <div class="form-check form-switch mb-1">
-                 <input class="form-check-input" type="checkbox" name="color-scheme-mode" value="light"
-                     id="light-mode-check" checked="">
+                 <input class="form-check-input" type="checkbox" name="color-scheme-mode" value="light" id="light-mode-check" checked="">
                  <label class="form-check-label" for="light-mode-check">Light Mode</label>
              </div>
 
              <div class="form-check form-switch mb-1">
-                 <input class="form-check-input" type="checkbox" name="color-scheme-mode" value="dark"
-                     id="dark-mode-check">
+                 <input class="form-check-input" type="checkbox" name="color-scheme-mode" value="dark" id="dark-mode-check">
                  <label class="form-check-label" for="dark-mode-check">Dark Mode</label>
              </div>
 
@@ -99,8 +97,7 @@
              </div>
 
              <div class="form-check form-switch mb-1">
-                 <input class="form-check-input" type="checkbox" name="compact" value="fixed" id="fixed-check"
-                     checked="">
+                 <input class="form-check-input" type="checkbox" name="compact" value="fixed" id="fixed-check" checked="">
                  <label class="form-check-label" for="fixed-check">Fixed</label>
              </div>
 
@@ -110,16 +107,14 @@
              </div>
 
              <div class="form-check form-switch mb-1">
-                 <input class="form-check-input" type="checkbox" name="compact" value="scrollable"
-                     id="scrollable-check">
+                 <input class="form-check-input" type="checkbox" name="compact" value="scrollable" id="scrollable-check">
                  <label class="form-check-label" for="scrollable-check">Scrollable</label>
              </div>
 
              <div class="d-grid mt-4">
                  <button class="btn btn-primary" id="resetBtn">Reset to Default</button>
 
-                 <a href="../../product/hyper-responsive-admin-dashboard-template/index.htm" class="btn btn-danger mt-3"
-                     target="_blank"><i class="mdi mdi-basket me-1"></i> Purchase
+                 <a href="../../product/hyper-responsive-admin-dashboard-template/index.htm" class="btn btn-danger mt-3" target="_blank"><i class="mdi mdi-basket me-1"></i> Purchase
                      Now</a>
              </div>
          </div> <!-- end padding-->
@@ -141,7 +136,6 @@
  <script src="<?= base_url() ?>assets/backend/js/pages/demo.toastr.js"></script>
 
 
-
  <!-- third party js -->
  <script src="<?= base_url() ?>assets/backend/js/vendor/jquery.dataTables.min.js"></script>
  <script src="<?= base_url() ?>assets/backend/js/vendor/dataTables.bootstrap5.js"></script>
@@ -156,10 +150,22 @@
  <script src="<?= base_url() ?>assets/backend/js/vendor/dataTables.select.min.js"></script>
  <!-- third party js ends -->
 
+
+
+
+ <!-- Typehead -->
+ <script src="<?= base_url() ?>assets/backend//js/vendor/handlebars.min.js"></script>
+ <script src="<?= base_url() ?>assets/backend//js/vendor/typeahead.bundle.min.js"></script>
+
+ <!-- Demo -->
+ <script src="<?= base_url() ?>assets/backend//js/pages/demo.typehead.js"></script>
+
+ <!-- Timepicker -->
+ <script src="<?= base_url() ?>assets/backend//js/pages/demo.timepicker.js"></script>
  <!-- demo app -->
  <!-- <script src="<?= base_url() ?>assets/backend/js/pages/demo.datatable-init.js"></script> -->
  <!-- end demo js-->
-
+ <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
  </body>
 
  </html>

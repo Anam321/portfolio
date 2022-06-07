@@ -1,104 +1,222 @@
 <script type="text/javascript">
-var save_method; //for save method string
-var table;
+    var save_method; //for save method string
+    var table;
+    var tablenotif;
+    var type, msg; // for alert
 
-var type, msg; // for alert
+    function showAlert(type, msg) {
 
-function showAlert(type, msg) {
+        toastr.options.closeButton = true;
+        toastr.options.progressBar = true;
+        toastr.options.extendedTimeOut = 1000; //1000
 
-    toastr.options.closeButton = true;
-    toastr.options.progressBar = true;
-    toastr.options.extendedTimeOut = 1000; //1000
+        toastr.options.timeOut = 3000;
+        toastr.options.fadeOut = 250;
+        toastr.options.fadeIn = 250;
 
-    toastr.options.timeOut = 3000;
-    toastr.options.fadeOut = 250;
-    toastr.options.fadeIn = 250;
-
-    toastr.options.positionClass = 'toast-top-full-width';
-    toastr[type](msg);
-}
-
-function reload_table() {
-    table.ajax.reload(null, false); //reload datatable ajax
-}
-
-function projek_table() {
-
-    table = $('#table_projek').DataTable({
-
-        "processing": true,
-        'paging': true,
-        'lengthChange': true,
-        'info': true,
-        'autoWidth': false,
-        "ajax": "<?= base_url("administrasi/projek/projek_list") ?>",
-        stateSave: true,
-        "order": []
+        toastr.options.positionClass = 'toast-top-full-width';
+        toastr[type](msg);
+    }
 
 
+
+    function reload_table() {
+        table.ajax.reload(null, false); //reload datatable ajax
+    }
+
+    $(document).ready(function() {
+        $('.summernote').summernote();
     });
-}
-projek_table();
-
-function jumlahnotif() {
-    $('#jumlah').empty();
-    $.ajax({
-        url: "<?php echo site_url('administrasi/dashboard/jumlahnotif/') ?>",
-        type: "POST",
-        dataType: "JSON",
-        success: function(data) {
-            $('#jumlah').text(data);
 
 
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert('Error get data from ajax');
-        }
-    });
-}
-jumlahnotif();
+    function listmessage() {
+        $('#listinbox').empty();
+        $.ajax({
+            url: "<?php echo site_url('administrasi/inbox/datamessage/') ?>",
+            type: "POST",
+            dataType: "JSON",
+            success: function(data) {
+                $('#listinbox').html(data);
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
+    }
+    listmessage();
 
 
-function detailproduk(id) {
-    $('#modaldetail').modal('show');
-    $('.modal-title').text('Detail Produk');
-    $('#detaildata').empty();
-    $.ajax({
-        url: "<?php echo site_url('administrasi/dashboard/detailProduk/') ?>" + id,
-        type: "POST",
-        dataType: "JSON",
-        success: function(data) {
-            // console.log(data);
-            $('#detaildata').html(data);
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            alert('Error get data from ajax');
-        }
-    });
-}
+    function navmessage() {
+        $('#navlismessage').empty();
+        $.ajax({
+            url: "<?php echo site_url('administrasi/inbox/navmessage/') ?>",
+            type: "POST",
+            dataType: "JSON",
+            success: function(data) {
+                $('#navlismessage').html(data);
 
-// function count_status() {
-//     $('#produk').empty();
-//     $('#posts').empty();
-//     $('#testi').empty();
-//     // ajax get data status
-//     $.ajax({
-//         url: "<?php echo site_url('admin/dashboard/count_status') ?>",
-//         type: "GET",
-//         dataType: "JSON",
-//         success: function(data) {
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
+    }
+    navmessage();
 
-//             $('#produk').text(data.produk);
-//             $('#testi').text(data.testi);
-//             $('#posts').text(data.blog);
 
-//         },
-//         error: function(jqXHR, textStatus, errorThrown) {
-//             type = 'error';
-//             msg = 'Error get data from ajax :(';
-//             showAlert(type, msg); //utk show alert
-//         }
-//     });
-// }
-// count_status();
+
+
+
+    function read(id) {
+        // var id_inbox = id;
+        hits(id);
+        $('#listinbox').empty();
+        $.ajax({
+            url: "<?php echo site_url('administrasi/inbox/readData/') ?>" + id,
+            type: "POST",
+            dataType: "JSON",
+            success: function(data) {
+                $('#listinbox').html(data);
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
+    }
+
+
+
+
+
+    function jumlahnotif() {
+        $('#jmlhnotif').empty();
+        $.ajax({
+            url: "<?php echo site_url('administrasi/inbox/jumlahnotif/') ?>",
+            type: "POST",
+            dataType: "JSON",
+            success: function(data) {
+                $('#jmlhnotif').text(data);
+                if (data > 0) {
+                    $('#notif').html('<span class="noti-icon-badge"></span>');
+                }
+
+
+
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            }
+        });
+    }
+    jumlahnotif();
+
+
+    function hits(id) {
+        $.ajax({
+            url: "<?php echo site_url('administrasi/inbox/hits/') ?>" + id,
+            type: "POST",
+            dataType: "JSON",
+            success: function(data) {
+                if (data.status == '00') {
+                    jumlahnotif();
+                } else {
+                    jumlahnotif();
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error deleting data');
+            }
+        });
+
+    }
+
+    function allmessage() {
+        window.location.href = "<?php echo site_url('administrasi/inbox/') ?>";
+
+    }
+
+    // function section2(id) {
+    //     $('#sectionid2').empty();
+    //     $.ajax({
+    //         url: "<?php echo site_url('administrasi/contact/section2/') ?>" + id,
+    //         type: "POST",
+    //         dataType: "JSON",
+    //         success: function(data) {
+    //             $('#sectionid2').html(data);
+    //             $('#sectionid').html('hide');
+
+
+    //         },
+    //         error: function(jqXHR, textStatus, errorThrown) {
+    //             alert('Error get data from ajax');
+    //         }
+    //     });
+    // }
+
+
+    // function delete_data(id) {
+    //     if (confirm('Apakah Anda yakin menghapus  ini ?')) {
+    //         // ajax delete data to database
+    //         $.ajax({
+    //             url: "<?php echo site_url('administrasi/contact/delete_data/') ?>" + id,
+    //             type: "POST",
+    //             dataType: "JSON",
+    //             success: function(data) {
+    //                 if (data.status == '00') {
+    //                     showAlert(data.type, data.mess);
+    //                     reload_table();
+
+    //                 } else {
+    //                     showAlert(data.type, data.mess);
+    //                     reload_table();
+    //                 }
+    //             },
+    //             error: function(jqXHR, textStatus, errorThrown) {
+    //                 alert('Error deleting data');
+    //             }
+    //         });
+    //     }
+    // }
+
+
+
+    // function jumlahnotif() {
+    //     $('#jumlah').empty();
+    //     $.ajax({
+    //         url: "<?php echo site_url('administrasi/contact/jumlahnotif/') ?>",
+    //         type: "POST",
+    //         dataType: "JSON",
+    //         success: function(data) {
+    //             $('#jumlah').text(data);
+
+
+    //         },
+    //         error: function(jqXHR, textStatus, errorThrown) {
+    //             alert('Error get data from ajax');
+    //         }
+    //     });
+    // }
+    // jumlahnotif();
+
+    // function notif() {
+    //     $('#notif').modal('show');
+    //     $('.modal-title').text('New');
+    //     $('#listnotif').empty();
+    //     $.ajax({
+    //         url: "<?php echo site_url('administrasi/contact/new_testi/') ?>",
+    //         type: "POST",
+    //         dataType: "JSON",
+    //         success: function(data) {
+    //             $('#listnotif').html(data);
+
+
+    //         },
+    //         error: function(jqXHR, textStatus, errorThrown) {
+    //             alert('Error get data from ajax');
+    //         }
+    //     });
+    // }
 </script>

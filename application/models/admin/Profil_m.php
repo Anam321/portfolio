@@ -14,6 +14,15 @@ class Profil_m extends CI_Model
 
         return $data;
     }
+
+    public function get_kontak($varams)
+    {
+        $query = $this->db->get('set_kontak')->row();
+        // $result = $query;
+        $data = $query->$varams;
+
+        return $data;
+    }
     public function get_data()
     {
         $this->db->select('*');
